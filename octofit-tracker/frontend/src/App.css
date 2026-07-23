@@ -1,0 +1,7 @@
+.app-shell {
+  max-width: 1080px;
+}
+
+.nav-link.active {
+  font-weight: 600;
+}
