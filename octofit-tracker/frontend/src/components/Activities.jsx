@@ -11,17 +11,20 @@ function normalizeCollection(payload) {
   return []
 }
 
-function Activities({ apiBaseUrl }) {
+function Activities() {
   const [activities, setActivities] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+    : 'http://localhost:8000/api/activities/'
 
   useEffect(() => {
     let isMounted = true
 
     async function fetchActivities() {
       try {
-        const response = await fetch(`${apiBaseUrl}/activities/`)
+        const response = await fetch(apiEndpoint)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
@@ -45,7 +48,7 @@ function Activities({ apiBaseUrl }) {
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl])
+  }, [apiEndpoint])
 
   return (
     <section>

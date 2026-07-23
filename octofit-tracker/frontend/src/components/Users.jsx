@@ -11,17 +11,20 @@ function normalizeCollection(payload) {
   return []
 }
 
-function Users({ apiBaseUrl }) {
+function Users() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+    : 'http://localhost:8000/api/users/'
 
   useEffect(() => {
     let isMounted = true
 
     async function fetchUsers() {
       try {
-        const response = await fetch(`${apiBaseUrl}/users/`)
+        const response = await fetch(apiEndpoint)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
@@ -45,7 +48,7 @@ function Users({ apiBaseUrl }) {
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl])
+  }, [apiEndpoint])
 
   return (
     <section>

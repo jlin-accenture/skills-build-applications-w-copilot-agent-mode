@@ -11,17 +11,20 @@ function normalizeCollection(payload) {
   return []
 }
 
-function Teams({ apiBaseUrl }) {
+function Teams() {
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+    : 'http://localhost:8000/api/teams/'
 
   useEffect(() => {
     let isMounted = true
 
     async function fetchTeams() {
       try {
-        const response = await fetch(`${apiBaseUrl}/teams/`)
+        const response = await fetch(apiEndpoint)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
@@ -45,7 +48,7 @@ function Teams({ apiBaseUrl }) {
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl])
+  }, [apiEndpoint])
 
   return (
     <section>

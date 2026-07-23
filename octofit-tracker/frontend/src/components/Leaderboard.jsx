@@ -11,17 +11,20 @@ function normalizeCollection(payload) {
   return []
 }
 
-function Leaderboard({ apiBaseUrl }) {
+function Leaderboard() {
   const [leaderboards, setLeaderboards] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const apiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+    : 'http://localhost:8000/api/leaderboard/'
 
   useEffect(() => {
     let isMounted = true
 
     async function fetchLeaderboard() {
       try {
-        const response = await fetch(`${apiBaseUrl}/leaderboard/`)
+        const response = await fetch(apiEndpoint)
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
@@ -45,7 +48,7 @@ function Leaderboard({ apiBaseUrl }) {
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl])
+  }, [apiEndpoint])
 
   const latestBoard = useMemo(() => leaderboards[0], [leaderboards])
 
